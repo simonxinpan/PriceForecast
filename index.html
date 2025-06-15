@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>股价预报・先行版 - 神算子 (Prophet)</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .page-header { display: flex; justify-content好的，收到最终指令！
+
+我们正式开启**“股价预报”**的开发征程。您明智地选择了**“列表而非搜索”**的MVP形态，这是一个足以奠定产品独特价值的战略决策。
+
+我们的第一步，就是将我们打磨到完美的“个股分析页”原型，**接入真实API数据**，让它真正地“活”起来。
+
+---
+
+### 第一步：让“股价预报”与真实世界对话
+
+**目标**:
+我们将修改您提供的“股价预报”静态页面代码，植入API调用逻辑。当页面加载时，它会自动从FMP服务器获取**苹果公司(AAPL)**的真实分析师评级数据，并在浏览器的“开发者控制台”里将这些数据显示出来。
+
+**您的任务 (预计耗时: 10分钟)**:
+
+1.  **准备文件**:
+    *   在您的电脑上，将您提供的HTML代码保存为一个名为 `prophet.html` 的文件。
+
+2.  **植入API引擎**:
+    *   用任何文本编辑器打开 `prophet.html`。
+    *   将文件滚动到**最最最下方**，找到 `</body>` 标签。
+    *   **在 `</body>` 标签的正上方**，将下面我为您准备的**【股价预报 · API调用代码】**，完整地复制并粘贴进去。
+
+3.  **替换API Key (关键!)**:
+    *   在您刚刚粘贴的代码中，找到这一行：
+        ```javascript
+        const apiKey = 'YOUR_API_KEY_HERE'; // 替换为您自己的FMP API Key
+        ```
+    *   请将 `YOUR_API_KEY_HERE` 这部分，**替换为您自己真实的、从FMP网站获取的API Key**。请确保Key被单引号`'`包裹。
+
+4.  **在浏览器中打开并验证**:
+    *   保存`prophet.html`文件。
+    *   直接用您的Chrome、Edge或遨游浏览器打开这个本地文件。
+    *   在页面上，按 `F12` 键打开“**开发者工具**”，并切换到“**Console**”（控制台）标签页。
+
+---
+
+### 【股价预报 · API调用代码】(请完整复制并粘贴)
+
+```html
+<script>
+    // --- API 配置 ---
+    const apiKey = 'ZYpXufkAUGUmzHLH5F4WeFFhStiaL7xu'; // 替换为您自己的FMP API Key
+    const stockTicker = 'AAPL'; // 我们先以苹果公司为例
+
+    // 构建API请求的URL
+    // 这个API可以获取分析师对特定股票的评级和目标价
+    const url = `https://financialmodelingprep.com/api/v3/analyst-estimates/${stockTicker}?apikey=${apiKey}`;
+
+    // --- 数据获取与处理 ---
+    function fetchAnalystData() {
+        console.log(`正在为 ${stockTicker} 获取分析师预报数据...`);
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`网络响应错误: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('成功获取到数据！', data);
+                
+                if (data && data.length > 0) {
+                    // FMP返回的是一个数组，包含了多年的历史数据，我们取最新的一个
+                    const latestForecast = data[0];
+                    alert(`成功获取到 ${latestForecast.symbol} 的分析师预报！`);
+
+                    // 在控制台打印一些关键信息，验证数据有效性
+                    console.log('--- 数据解析示例 ---');
+                    console.log(`数据日期: ${latestForecast.date}`);
+                    console.log(`分析师数量: ${latestForecast.analystsCount}`);
+                    console.log(`平均目标价: $${latestForecast.estimatedPriceAvg}`);
+                    console当然！我们立刻开始行动。您做出了一个非常明智的决定：**先让一个产品“活”起来，而不是追求一个庞大的、无法快速落地的计划。**
+
+我们将以您最满意的**“股价预报”最终版原型**为蓝图，正式开启我们的API对接之旅。
+
+这个过程，我将为您拆解成**两个清晰的、循序渐进的里程碑**，每一步都有明确的目标和可验证的成果。
+
+---
+
+### 里程碑一：获取并验证第一份真实数据
+
+**目标**: 我们不追求一次性实现所有功能。我们的第一个小目标，是成功地从FMP的API中，获取到**一只股票（例如AAPL）的分析师评级数据**，并在浏览器的“开发者工具”里亲眼看到它。
+
+这是从0到1最关键的一步，它将验证我们的API Key、网络连接和基础代码都是通的。
+
+**您的任务 (预计耗时: 10分钟)**:
+
+1.  **准备您的“开发总部”**:
+    *   请按照我们之前为“聪明钱”项目所做的那样，在您的GitHub上创建一个**新的仓库**，命名为 `Prophet` (神: space-between; align-items: flex-end; margin-bottom: 20px; flex-wrap: wrap;}
+        .brand-info .title { font-size: 1.8em; font-weight: bold; color: #2c3e50; margin: 0; }
+        .brand-info .subtitle { font-size: 1.1em; color: #7f8c8d; margin: 0; }
+        .date-info { font-size: 0.9em; color: #7f8c8d; text-align: right; }
+        .main-layout { display: flex; gap: 20px; align-items: flex-start; }
+        .main-content { flex: 3; }
+        .sidebar { flex: 1; min-width: 250px; position: sticky; top: 20px; }
+        @media (max-width: 992px) { .main-layout { flex-direction: column; } .sidebar { width: 100%; min-width: unset; position: static; } }
+        .stock-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .stock-header .symbol { font-size: 2em; font-weight: bold; }
+        .stock-header .name { font-size: 1.2em; color: #555; }
+        .card { background-color: #fff; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .card h2, .card h3 { margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.2em; color: #34495e; }
+        .timeframe-selector { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
+        .timeframe-btn { padding: 8px 20px; border: 1px solid #ccc; background-color: #f9f9f9; border-radius: 20px; cursor: pointer; font-weight: 500; }
+        .timeframe-btn.active { background.log(`最高目标价: $${latestForecast.estimatedPriceHigh}`);
+                    console.log(`最低目标价: $${latestForecast.estimatedPriceLow}`);
+                    console.log(`买入评级数: ${latestForecast.buy}`);
+                    console.log(`持有评级数: ${latestForecast.hold}`);
+                    console.log(`卖出评级数: ${latestForecast.sell}`);
+                    console.log('--------------------');
+                } else {
+                    console.error('未能从API获取到有效的预报数据。');
+                    alert('未能获取到有效的预报数据，请检查股票代码或API Key。');
+                }
+            })
+            .catch(error => {
+                console.error('获取数据时发生严重错误:', error);
+                alert(`数据加载失败！错误信息: ${error.message}。请检查API Key或网络连接。`);
+            });
+    }
+
+    // --- 页面加载完成后，自动执行我们的主函数 ---
+    document.addEventListener('DOMContentLoaded', () => {
+        // 先保留静态页面的交互逻辑
+        const dateElement = document.getElementById('currentDate');
+        if (dateElement) {
+            dateElement.textContent = `截至 ${new Date().toLocaleDateString('zh-CN',算子)。
+    *   将您提供的、我们最终版的**“股价预报”HTML完整代码**，上传到这个新仓库的`index.html`文件中。
+    *   用同样的方法，在Netlify上为这个新的`Prophet`仓库创建一个新的站点，并获取到它的专属网址（例如 `prophet-demo.netlify.app-color: #1abc9c; color: #fff; border-color: #1abc9c; }
+        .gauge-display { display: flex; align-items: flex-end; justify-content: center; gap: 15px; flex-wrap: wrap; padding: 10px 0; }
+        .gauge-side-label { text-align: center; width: 120px; }
+        .gauge-side-label .label { font-size: 0.9em; color: #7f8c8d; }
+        .gauge-side-label .value { font-size: 1.8em; font-weight: bold; display: block; }
+        .gauge-side-label .value.current { color: #34495e; }
+        .gauge-side-label .value.positive { color: #27ae60; }
+        .gauge-side-label .value.negative { color: #e74c3c; }
+        .gauge-container { position: relative; width: 200px; height: 100px; }
+        .gauge-chart { width: 100%; height: 100%; background: #e9ecef; border-radius: 100px 100px 0 0; }
+        .zero-line { position: absolute; top: 0; left: 50%; width: 2px; height: 15px; background-image: linear-gradient(to bottom, #bdc3c7 60%, transparent 40%); background-size: 2px 6px; }
+        .potential-summary { text-align: center; width: 100%; margin-top: -85px; position: relative; z-index: 1; pointer-events: none;}
+        .potential-summary .value { font-size: 2.2em; font-weight: bold; }
+        .potential-summary .label { font-size: 0.9em; color: #7f8c8d; }
+        .potential-summary .value.positive { color: #27ae60; }
+        .potential-summary .value.negative { color: #e74c3c; }
+        .consensus-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; align-items: center; flex-wrap: wrap; }
+        @media (max-width: 576px) { .consensus-grid { grid-template-columns: 1fr; } }
+        .consensus-stats .stat-item { margin-bottom: 15px; }
+        .consensus-stats .label { font-size: 0.9em; color: #7f8c8d; }
+        .consensus-stats .value { font-size: 1.2em; font-weight: bold; }
+        .rating-chart .bar-wrapper { display: flex; align-items: center; margin-bottom: 8px; }
+        .rating-chart .bar-label { width: 50px; font-size: 0.9em; color: #555; }
+        .rating-chart .bar { height: 18px; border-radius: 3px; color: #fff; { year: 'numeric', month: 'long', day: 'numeric' })}`;
+        }
+        
+        const timeframeSelector = document.getElementById('timeframeSelector');
+        if (timeframeSelector) {
+            timeframeSelector.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    document.querySelectorAll('.timeframe-btn').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    alert('时间切换功能将在后续步骤实现！');
+                }
+            });
+        }
+
+        // 执行真实数据获取
+        fetchAnalystData();
+    });
+</script>
