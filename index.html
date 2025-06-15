@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>股价预报 - 神算子 (Prophet)</title>
-    <!-- CSS样式与之前版本完全一致 -->
+    <title>股价预报・先行版 - 神算子 (Prophet)</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
         .container { max-width: 1200px; margin: 0 auto; }
@@ -47,12 +46,14 @@
         .rating-chart .bar-wrapper { display: flex; align-items: center; margin-bottom: 8px; }
         .rating-chart .bar-label { width: 50px; font-size: 0.9em; color: #555; }
         .rating-chart .bar { height: 18px; border-radius: 3px; color: #fff; font-size: 0.8em; line-height: 18px; padding-left: 5px; box-sizing: border-box; transition: width 0.5s ease-out; text-shadow: 1px 1px 1px rgba(0,0,0,0.1); }
-        .bar-buy { background-color: #2ecc71; } .bar-hold { background-color: #f39c12; } .bar-sell { background-color: #e74c3c; }
+        .bar-buy { background-color: #2ecc71; }
+        .bar-hold { background-color: #f39c12; }
+        .bar-sell { background-color: #e74c3c; }
         .analyst-list-container { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;}
         .analyst-list { list-style-type: none; padding: 0; margin: 0; max-height: 200px; overflow-y: auto; }
         .analyst-list li { display: flex; justify-content: space-between; padding: 8px 5px; }
         .analyst-list li:nth-child(odd) { background-color: #f9fafb; }
-        .sidebar { display: none; }
+        .sidebar { display: none; } /* 在这个单页版本中，我们先隐藏侧边栏 */
     </style>
 </head>
 <body>
@@ -66,74 +67,97 @@
         </header>
 
         <div class="main-layout">
-            <div class="main-content" style="flex: 1;">
+            <div class="main-content" style="flex: 1;"> <!-- 让主内容区占满全部宽度 -->
                 <div id="stock-analysis-container">
+                    <!-- 这个区域的内容将被JS动态填充 -->
                     <div class="card"><p>正在加载分析师预报数据...</p></div>
                 </div>
             </div>
+
+            <aside class="sidebar" id="sidebar">
+                <!-- 侧边栏内容暂时保留，但默认隐藏 -->
+            </aside>
         </div>
     </div>
 
     <script>
         // --- 1. 配置区域 ---
-        const apiKey = 'ZYpXufkAUGUmzHLH5F4WeFFhStiaL7xu'; // 替换为您自己100%正确的FMP API Key
-        const stockTicker = 'AAPL';
+        //##################################################################
+        //###### 在这里替换为您自己的 EODHD API Token #######
+        //##################################################################
+        const apiToken = ' 684e609bf177c8.49627614'; 
+
+        const stockTicker = 'AAPL.US'; // EODHD 需要在美股代码后加上'.US'
 
         // --- 2. 核心数据获取函数 ---
         async function fetchAllData(ticker) {
-            console.log(`开始为 ${ticker} 获取所有数据...`);
-            const quoteUrl = `https://financialmodelingprep.com/api/v3/quote-short/${ticker}?apikey=${apiKey}`;
-            const estimatesUrl = `https://financialmodelingprep.com/api/v3/analyst-estimates/${ticker}?apikey=${apiKey}`;
+            console.log(`开始为 ${ticker} 获取所有数据 (使用EODHD)...`);
+            const realTimeUrl = `https://eodhistoricaldata.com/api/real-time/${ticker}?api_token=${apiToken}&fmt=json`;
+            const fundamentalsUrl = `https://eodhistoricaldata.com/api/fundamentals/${ticker}?api_token=${apiToken}`;
 
-            // 并行发起两个API请求
-            const [quoteResponse, estimatesResponse] = await Promise.all([
-                fetch(quoteUrl),
-                fetch(estimatesUrl)
-            ]);
+            try {
+                const [realTimeResponse, fundamentalsResponse] = await Promise.all([
+                    fetch(realTimeUrl),
+                    fetch(fundamentalsUrl)
+                ]);
 
-            // 检查两个请求是否都成功
-            if (!quoteResponse.ok) throw new Error(`获取股价失败: 服务器响应 ${quoteResponse.status} ${quoteResponse.statusText}`);
-            if (!estimatesResponse.ok) throw new Error(`获取分析师评级失败: 服务器响应 ${estimatesResponse.status} ${estimatesResponse.statusText}`);
+                if (!realTimeResponse.ok) throw new Error(`获取股价失败: ${realTimeResponse.statusText}`);
+                if (!fundamentalsResponse.ok) throw new Error(`获取基本面/评级失败: ${fundamentalsResponse.statusText}`);
 
-            const quoteData = await quoteResponse.json();
-            const estimatesData = await estimatesResponse.json();
+                const realTimeData = await realTimeResponse.json();
+                const fundamentalsData = await fundamentalsResponse.json();
 
-            // 增强的数据校验
-            if (!quoteData?.[0]?.price) {
-                throw new Error('未能从API获取到有效的当前股价。');
+                console.log('所有数据获取成功!');
+                return {
+                    quote: realTimeData,
+                    fundamentals: fundamentalsData
+                };
+            } catch (error) {
+                console.error('EODHD数据获取过程中发生严重错误:', error);
+                throw error; // 将错误继续抛出，由调用者处理
             }
-            if (!estimatesData?.[0]?.estimatedPriceAvg) {
-                throw new Error('未能从API获取到有效的分析师预报数据。');
-            }
-
-            console.log('所有数据获取成功!');
-            return {
-                quote: quoteData[0],
-                estimates: estimatesData[0]
-            };
         }
-
+        
         // --- 3. 页面渲染主函数 ---
-        function renderPage(data) {
-            const { quote, estimates } = data;
-            const currentPrice = quote.price;
-            const targetPrice = estimates.estimatedPriceAvg;
-            
+        async function initializePage() {
             const container = document.getElementById('stock-analysis-container');
-            container.innerHTML = createStockHTML(currentPrice, estimates);
             
-            updateDashboard(currentPrice, estimates);
+            document.getElementById('currentDate').textContent = `截至 ${new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}`;
+
+            try {
+                const data = await fetchAllData(stockTicker);
+                
+                if (data && data.quote && data.fundamentals?.AnalystRatings) {
+                    const currentPrice = data.quote.close; // EODHD的实时API返回的是'close'字段
+                    const analystRatings = data.fundamentals.AnalystRatings;
+                    
+                    console.log('--- 数据解析成功 ---');
+                    console.log('当前股价:', currentPrice);
+                    console.log('分析师评级:', analystRatings);
+                    
+                    // 渲染页面
+                    container.innerHTML = createStockHTML(currentPrice, analystRatings);
+                    // 渲染图表
+                    updateDashboard(currentPrice, analystRatings);
+                } else {
+                    throw new Error('API返回的数据不完整或格式不正确。');
+                }
+            } catch (error) {
+                console.error("初始化页面失败:", error);
+                container.innerHTML = `<div class="card"><p style="color:red;">数据加载失败！错误: ${error.message}。请检查API Token或网络连接。</p></div>`;
+            }
         }
         
         // --- 4. 动态生成HTML的辅助函数 ---
-        function createStockHTML(currentPrice, forecast) {
-            const upside = ((forecast.estimatedPriceAvg / currentPrice) - 1) * 100;
+        function createStockHTML(currentPrice, ratings) {
+            const targetPrice = ratings.TargetPrice;
+            const upside = ((targetPrice / currentPrice) - 1) * 100;
             const isPositive = upside >= 0;
             return `
                 <header class="stock-header">
                     <div>
-                        <div class="symbol">${forecast.symbol}</div>
-                        <div class="name">苹果公司</div>
+                        <div class="symbol">${ratings.Code}</div>
+                        <div class="name">${ratings.Name}</div>
                     </div>
                 </header>
                 <div class="card">
@@ -154,18 +178,18 @@
                             </div>
                         </div>
                         <div class="gauge-side-label">
-                            <span class="value ${isPositive ? 'positive' : 'negative'}">$${forecast.estimatedPriceAvg.toFixed(2)}</span>
+                            <span class="value ${isPositive ? 'positive' : 'negative'}">$${targetPrice.toFixed(2)}</span>
                             <span class="label">平均目标价</span>
                         </div>
                     </div>
                 </div>
                 <div class="card">
-                    <h2>分析师共识</h2>
+                     <h2>分析师共识</h2>
                     <div class="consensus-grid">
                         <div class="consensus-stats">
-                            <div class="stat-item"><div class="label">评级分析师</div><div class="value">${forecast.analystsCount} 位</div></div>
-                            <div class="stat-item"><div class="label">平均目标价</div><div class="value">$${forecast.estimatedPriceAvg.toFixed(2)}</div></div>
-                            <div class="stat-item"><div class="label">目标价范围</div><div class="value">$${forecast.estimatedPriceLow} - $${forecast.estimatedPriceHigh}</div></div>
+                            <div class="stat-item"><div class="label">评级分析师</div><div class="value">${ratings.Rating} 位</div></div>
+                            <div class="stat-item"><div class="label">平均目标价</div><div class="value">$${targetPrice.toFixed(2)}</div></div>
+                            <div class="stat-item"><div class="label">目标价范围</div><div class="value">$${ratings.Low.toFixed(2)} - $${ratings.High.toFixed(2)}</div></div>
                         </div>
                         <div class="rating-chart" id="ratingChart"></div>
                     </div>
@@ -174,10 +198,10 @@
         }
 
         // --- 5. 更新图表的函数 ---
-        function updateDashboard(currentPrice, forecast) {
-            const upside = ((forecast.estimatedPriceAvg / currentPrice) - 1) * 100;
+        function updateDashboard(currentPrice, ratings) {
+            const upside = ((ratings.TargetPrice / currentPrice) - 1) * 100;
             const isPositive = upside >= 0;
-            const absoluteMarketMax = 60.0;
+            const absoluteMarketMax = 60.0; // 模拟的市场最大潜力值
             const fillPercent = Math.min(Math.abs(upside) / absoluteMarketMax, 1);
             const degree = fillPercent * 90;
             
@@ -190,27 +214,19 @@
             document.getElementById('gaugeChart').style.background = gradient;
             
             const ratingChart = document.getElementById('ratingChart');
-            const totalRatings = forecast.buy + forecast.hold + forecast.sell;
+            const totalRatings = ratings.StrongBuy + ratings.Buy + ratings.Hold + ratings.Sell + ratings.StrongSell;
             if(totalRatings > 0){
+                const buyTotal = ratings.StrongBuy + ratings.Buy;
                 ratingChart.innerHTML = `
-                    <div class="bar-wrapper"><div class="bar-label">买入</div><div class="bar bar-buy" style="width:${(forecast.buy/totalRatings)*100}%">${forecast.buy}</div></div>
-                    <div class="bar-wrapper"><div class="bar-label">持有</div><div class="bar bar-hold" style="width:${(forecast.hold/totalRatings)*100}%">${forecast.hold}</div></div>
-                    <div class="bar-wrapper"><div class="bar-label">卖出</div><div class="bar bar-sell" style="width:${(forecast.sell/totalRatings)*100}%">${forecast.sell}</div></div>
+                    <div class="bar-wrapper"><div class="bar-label">买入</div><div class="bar bar-buy" style="width:${(buyTotal/totalRatings)*100}%">${buyTotal}</div></div>
+                    <div class="bar-wrapper"><div class="bar-label">持有</div><div class="bar bar-hold" style="width:${(ratings.Hold/totalRatings)*100}%">${ratings.Hold}</div></div>
+                    <div class="bar-wrapper"><div class="bar-label">卖出</div><div class="bar bar-sell" style="width:${((ratings.Sell + ratings.StrongSell)/totalRatings)*100}%">${ratings.Sell + ratings.StrongSell}</div></div>
                 `;
             }
         }
 
         // --- 6. 页面加载完成后执行 ---
-        document.addEventListener('DOMContentLoaded', async () => {
-            document.getElementById('currentDate').textContent = `截至 ${new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}`;
-            try {
-                const data = await fetchAllData(stockTicker);
-                renderPage(data);
-            } catch (error) {
-                console.error("初始化页面失败:", error);
-                document.getElementById('stock-analysis-container').innerHTML = `<div class="card"><p style="color:red;">页面初始化失败: ${error.message}</p></div>`;
-            }
-        });
+        document.addEventListener('DOMContentLoaded', initializePage);
     </script>
 </body>
 </html>
