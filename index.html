@@ -7,97 +7,7 @@
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
         .container { max-width: 1200px; margin: 0 auto; }
-        .page-header { display: flex; justify-content好的，收到最终指令！
-
-我们正式开启**“股价预报”**的开发征程。您明智地选择了**“列表而非搜索”**的MVP形态，这是一个足以奠定产品独特价值的战略决策。
-
-我们的第一步，就是将我们打磨到完美的“个股分析页”原型，**接入真实API数据**，让它真正地“活”起来。
-
----
-
-### 第一步：让“股价预报”与真实世界对话
-
-**目标**:
-我们将修改您提供的“股价预报”静态页面代码，植入API调用逻辑。当页面加载时，它会自动从FMP服务器获取**苹果公司(AAPL)**的真实分析师评级数据，并在浏览器的“开发者控制台”里将这些数据显示出来。
-
-**您的任务 (预计耗时: 10分钟)**:
-
-1.  **准备文件**:
-    *   在您的电脑上，将您提供的HTML代码保存为一个名为 `prophet.html` 的文件。
-
-2.  **植入API引擎**:
-    *   用任何文本编辑器打开 `prophet.html`。
-    *   将文件滚动到**最最最下方**，找到 `</body>` 标签。
-    *   **在 `</body>` 标签的正上方**，将下面我为您准备的**【股价预报 · API调用代码】**，完整地复制并粘贴进去。
-
-3.  **替换API Key (关键!)**:
-    *   在您刚刚粘贴的代码中，找到这一行：
-        ```javascript
-        const apiKey = 'YOUR_API_KEY_HERE'; // 替换为您自己的FMP API Key
-        ```
-    *   请将 `YOUR_API_KEY_HERE` 这部分，**替换为您自己真实的、从FMP网站获取的API Key**。请确保Key被单引号`'`包裹。
-
-4.  **在浏览器中打开并验证**:
-    *   保存`prophet.html`文件。
-    *   直接用您的Chrome、Edge或遨游浏览器打开这个本地文件。
-    *   在页面上，按 `F12` 键打开“**开发者工具**”，并切换到“**Console**”（控制台）标签页。
-
----
-
-### 【股价预报 · API调用代码】(请完整复制并粘贴)
-
-```html
-<script>
-    // --- API 配置 ---
-    const apiKey = 'ZYpXufkAUGUmzHLH5F4WeFFhStiaL7xu'; // 替换为您自己的FMP API Key
-    const stockTicker = 'AAPL'; // 我们先以苹果公司为例
-
-    // 构建API请求的URL
-    // 这个API可以获取分析师对特定股票的评级和目标价
-    const url = `https://financialmodelingprep.com/api/v3/analyst-estimates/${stockTicker}?apikey=${apiKey}`;
-
-    // --- 数据获取与处理 ---
-    function fetchAnalystData() {
-        console.log(`正在为 ${stockTicker} 获取分析师预报数据...`);
-
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`网络响应错误: ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('成功获取到数据！', data);
-                
-                if (data && data.length > 0) {
-                    // FMP返回的是一个数组，包含了多年的历史数据，我们取最新的一个
-                    const latestForecast = data[0];
-                    alert(`成功获取到 ${latestForecast.symbol} 的分析师预报！`);
-
-                    // 在控制台打印一些关键信息，验证数据有效性
-                    console.log('--- 数据解析示例 ---');
-                    console.log(`数据日期: ${latestForecast.date}`);
-                    console.log(`分析师数量: ${latestForecast.analystsCount}`);
-                    console.log(`平均目标价: $${latestForecast.estimatedPriceAvg}`);
-                    console当然！我们立刻开始行动。您做出了一个非常明智的决定：**先让一个产品“活”起来，而不是追求一个庞大的、无法快速落地的计划。**
-
-我们将以您最满意的**“股价预报”最终版原型**为蓝图，正式开启我们的API对接之旅。
-
-这个过程，我将为您拆解成**两个清晰的、循序渐进的里程碑**，每一步都有明确的目标和可验证的成果。
-
----
-
-### 里程碑一：获取并验证第一份真实数据
-
-**目标**: 我们不追求一次性实现所有功能。我们的第一个小目标，是成功地从FMP的API中，获取到**一只股票（例如AAPL）的分析师评级数据**，并在浏览器的“开发者工具”里亲眼看到它。
-
-这是从0到1最关键的一步，它将验证我们的API Key、网络连接和基础代码都是通的。
-
-**您的任务 (预计耗时: 10分钟)**:
-
-1.  **准备您的“开发总部”**:
-    *   请按照我们之前为“聪明钱”项目所做的那样，在您的GitHub上创建一个**新的仓库**，命名为 `Prophet` (神: space-between; align-items: flex-end; margin-bottom: 20px; flex-wrap: wrap;}
+        .page-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; flex-wrap: wrap;}
         .brand-info .title { font-size: 1.8em; font-weight: bold; color: #2c3e50; margin: 0; }
         .brand-info .subtitle { font-size: 1.1em; color: #7f8c8d; margin: 0; }
         .date-info { font-size: 0.9em; color: #7f8c8d; text-align: right; }
@@ -111,69 +21,367 @@
         .card { background-color: #fff; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .card h2, .card h3 { margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.2em; color: #34495e; }
         .timeframe-selector { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
-        .timeframe-btn { padding: 8px 20px; border: 1px solid #ccc; background-color: #f9f9f9; border-radius: 20px; cursor: pointer; font-weight: 500; }
-        .timeframe-btn.active { background.log(`最高目标价: $${latestForecast.estimatedPriceHigh}`);
-                    console.log(`最低目标价: $${latestForecast.estimatedPriceLow}`);
-                    console.log(`买入评级数: ${latestForecast.buy}`);
-                    console.log(`持有评级数: ${latestForecast.hold}`);
-                    console.log(`卖出评级数: ${latestForecast.sell}`);
-                    console.log('--------------------');
-                } else {
-                    console.error('未能从API获取到有效的预报数据。');
-                    alert('未能获取到有效的预报数据，请检查股票代码或API Key。');
-                }
-            })
-            .catch(error => {
-                console.error('获取数据时发生严重错误:', error);
-                alert(`数据加载失败！错误信息: ${error.message}。请检查API Key或网络连接。`);
-            });
-    }
+        .timeframe-btn { padding: 8px 20px; border: 1px solid #ccc;好的，您是对的！在这种情况下，提供一份**可以100%完整覆盖 background-color: #f9f9f9; border-radius: 20px; cursor: pointer; font-weight: 500; }
+        .timeframe-btn.active { background-color: #1abc9c; color: #fff; border-color: #1abc9c; }
+        .gauge-display { display: flex; align-items: flex-end; justify-content: center; gap: 15px; flex-wrap: wrap; padding: 10px 0; }
+        .gauge-side-label { text-align: center; width: 120px; }
+        .gauge-side-label .label { font-size: 0.9em; color: #7f8c8d; }**的代码，是杜绝任何潜在复制粘贴错误的最佳方式。
 
-    // --- 页面加载完成后，自动执行我们的主函数 ---
-    document.addEventListener('DOMContentLoaded', () => {
-        // 先保留静态页面的交互逻辑
-        const dateElement = document.getElementById('currentDate');
-        if (dateElement) {
-            dateElement.textContent = `截至 ${new Date().toLocaleDateString('zh-CN',算子)。
-    *   将您提供的、我们最终版的**“股价预报”HTML完整代码**，上传到这个新仓库的`index.html`文件中。
-    *   用同样的方法，在Netlify上为这个新的`Prophet`仓库创建一个新的站点，并获取到它的专属网址（例如 `prophet-demo.netlify.app-color: #1abc9c; color: #fff; border-color: #1abc9c; }
+我将为您提供一份**绝对完整的、包含了所有最新修正的**最终代码。您只需要按照指示，**将GitHub上`index.html`文件的全部
+        .gauge-side-label .value { font-size: 1.8em; font-weight: bold; display: block; }
+        .gauge-side-label .value.current { color: #34495e; }
+        .gauge-side-label .value.positive { color: #27ae60; }
+        .gauge-side-label .value.negative { color: #e74c3c; }
+        .gauge-container { position: relative; width: 200内容清空，然后用下面这份代码完整替换**即可。
+
+---
+
+### 第五步（最终完整版）：修复错误并渲染数据
+
+**您的任务 (预计耗时: 3分钟)**:
+
+1.  **回到GitHub**，进入`index.html`的编辑模式。
+2.  **清空所有旧代码**:px; height: 100px; }
+        .gauge-chart { width: 100%; height: 100%; background: #e9ecef; border-radius: 100px 100px 0 0; }
+        .zero-line { position: absolute; top: 0 按下`Ctrl + A` (Windows) 或 `Cmd + A` (Mac) 全选，然后按`Delete`键。
+3.  **粘贴新代码**: 将下面这份**【股价预报V9.1 - 完整修复版】**代码完整地复制并粘贴进去。
+4.  **替换API Key**: 在新代码的`<script>`部分顶部，找到`YOUR_API_KEY_HERE`并替换为您自己的Key。
+5; left: 50%; width: 2px; height: 15px; background-image: linear-gradient(to bottom, #bdc3c7 60%, transparent 40%); background-size: 2px 6px; }
+        .potential-summary { text-align: center; width: 100%; margin-top: -85px; position: relative; z-index: 1; pointer-events: none;}
+        .potential-summary .value { font-size: 2.2em.  **提交更改**，并等待Netlify自动部署。
+
+---
+
+### 【股价预报V9.1 - 完整修复版】(请完整复制)
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>股价预报; font-weight: bold; }
+        .potential-summary .label { font-size: 0.9em; color: #7f8c8d; }
+        .potential-summary .value.positive { color: #27ae60; }
+        .potential-summary .value.negative { color: #e74c3c; }
+        .consensus-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; align-items: center; flex-wrap: wrap; }
+        @media (max-width: 576px) { .consensus-grid { grid・先行版 - 神算子 (Prophet)</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,-template-columns: 1fr; } }
+        .consensus-stats .stat-item { margin-bottom: 15px; }
+        .consensus-stats .label { font-size: 0.9em; color: #7f8c8d; }
+        .consensus-stats .value { font-size: 1.2em; font-weight: bold; }
+        .rating-chart .bar-wrapper { display: flex sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .page-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; flex-wrap: wrap;}
+        .brand-info .title { font-size: 1.8em; font-weight: bold; color: #2c3e50; margin: 0; }
+        .brand-info .subtitle { font-size: 1.1em; color: #7f8c; align-items: center; margin-bottom: 8px; }
+        .rating-chart .bar-label { width: 50px; font-size: 0.9em; color: #555;8d; margin: 0; }
+        .date-info { font-size: 0.9em; color: #7f8c8d; text-align: right; }
+        .main-layout { display: flex; gap: 20px; align-items: flex-start; }
+        .main-content { flex: 3; }
+        .sidebar { flex: 1; min-width: 250px; position: sticky; top: 20px; }
+        @media (max }
+        .rating-chart .bar { height: 18px; border-radius: 3px; color: #fff; font-size: 0.8em; line-height: 18px; padding-left: 5px; box-sizing: border-box; transition: width 0.5s ease-out; text-shadow: 1px 1px 1px rgba(0,0,0,0.1); }
+        .bar-buy { background-color: #2ecc71; }
+        .-width: 992px) { .main-layout { flex-direction: column; } .sidebar { width: 100%; min-width: unset; position: static; } }
+        .stock-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .stock-header .symbol { font-size: 2em; font-weight: bold; }
+        .stock-header .name { font-size: 1.2em; color: #555; }
+        .card { background-color: #fff; borderbar-hold { background-color: #f39c12; }
+        .bar-sell { background-color: #e74c3c; }
+        .analyst-list-container { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;}
+        .analyst-list { list-style-type: none; padding: 0; margin: 0; max-height: 200px; overflow-y: auto; }
+        .analyst-list li { display: flex; justify-content: space-between; padding: 8-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .card h2, .card h3 { margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.2em; color: #34495e; }
+        .timepx 5px; }
+        .analyst-list li:nth-child(odd) { background-color: #f9fafb; }
+        .sidebar .card h3 { font-size: 1.1em; }
+        .stock-list { list-style-type: none; padding: 0; margin: 0; }
+        .stock-list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-radius: 5px; text-decoration: none; color: inherit; }
+        .stock-list-item:hover { background-color: #f0fframe-selector { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
+        .timeframe-btn { padding: 8px 20px; border: 1px solid #ccc; background-color: #f9f9f9; border-radius:3f4; }
+        .stock-list-item .info .ticker { font-weight: bold; }
+        .stock-list-item .info .name { font-size: 0.8em; color: #7f8c8d; }
+        .stock-list-item .percent { font-weight: bold; font-size: 1.1em; }
+        .percent-gain { color: #27ae60; }
+        .percent-loss { color: #e74c3c 20px; cursor: pointer; font-weight: 500; }
+        .timeframe-btn.active { background-color: #1abc9c; color: #fff; border-color: #1abc9c; }
         .gauge-display { display: flex; align-items: flex-end; justify-content: center; gap: 15px; flex-wrap: wrap; padding: 10px 0; }
         .gauge-side-label { text-align: center; width: 120px; }
         .gauge-side-label .label { font-size: 0.9em; color: #7f8c8d; }
-        .gauge-side-label .value { font-size: 1.8em; font-weight: bold; display: block; }
+        .gauge-side-label .value { font-size; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <div class="brand-info">
+                <h1 class="title">股价预报</h1>
+                <p class="subtitle">by 神算子 (Prophet)</p>
+            </div>
+            <div id="currentDate" class="date-info"></div>
+        </header>
+
+        <div class="main-layout">
+            <div class="main-content">
+                <header class="stock-header">
+                    <div>
+                        <div class="symbol" id="stockSymbol">...</div>
+                        <div class="name" id="stockName">...</div>
+                    </div>
+                </header>
+                <div class="card" id="main-card">
+                    <p>正在加载预报数据...</p>
+                </div>
+            </div>
+
+: 1.8em; font-weight: bold; display: block; }
         .gauge-side-label .value.current { color: #34495e; }
         .gauge-side-label .value.positive { color: #27ae60; }
         .gauge-side-label .value.negative { color: #e74c3c; }
         .gauge-container { position: relative; width: 200px; height: 100px; }
         .gauge-chart { width: 100%; height: 100%; background: #e9ecef; border-radius: 100px 100px 0 0; }
-        .zero-line { position: absolute; top: 0; left: 50%; width: 2px; height: 15px; background-image: linear-gradient(to bottom, #bdc3c7 60%, transparent 40%); background-size: 2px 6px; }
+        .zero-line { position: absolute; top: 0; left: 50%; width: 2px            <aside class="sidebar">
+                <div class="card" id="sidebar-card">
+                     <p>正在加载市场机会...</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // --- API 配置 ---
+        const apiKey = 'ZYpXufkAUGUmzHLH5F4WeFFhStiaL7xu'; // 替换为您自己的FMP API Key
+        const stockTicker = 'AAPL'; // 我们先以苹果公司为例
+
+        // --- 1. 获取股价 + 2. 获取分析师评级 (通过Promise.all并行处理) ---
+        async function fetchAllData(ticker) {
+            console.log(`开始为 ${ticker} 获取所有数据...; height: 15px; background-image: linear-gradient(to bottom, #bdc3c7 60%, transparent 40%); background-size: 2px 6px; }
         .potential-summary { text-align: center; width: 100%; margin-top: -85px; position: relative; z-index: 1; pointer-events: none;}
-        .potential-summary .value { font-size: 2.2em; font-weight: bold; }
+        .potential-summary`);
+            const quoteUrl = `https://financialmodelingprep.com/api/v3/quote-short/${ticker}?apikey=${apiKey}`;
+            const estimatesUrl = `https://financialmodelingprep.com/api/v3/analyst-estimates/${ticker}?apikey=${apiKey}`;
+
+            try {
+                // 并行发起两个API请求
+                const [quoteResponse, estimatesResponse] = await Promise.all([
+                    fetch(quoteUrl),
+ .value { font-size: 2.2em; font-weight: bold; }
         .potential-summary .label { font-size: 0.9em; color: #7f8c8d; }
         .potential-summary .value.positive { color: #27ae60; }
         .potential-summary .value.negative { color: #e74c3c; }
-        .consensus-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; align-items: center; flex-wrap: wrap; }
+        .consensus-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 2                    fetch(estimatesUrl)
+                ]);
+
+                if (!quoteResponse.ok) throw new Error(`获取股价失败: ${quoteResponse.statusText}`);
+                if (!estimatesResponse.ok) throw new Error(`获取分析师评级失败: ${estimatesResponse.statusText}`);
+
+                const quoteData = await quoteResponse.json();
+                const estimatesData = await estimatesResponse.json();
+
+                console.log('所有数据获取成功!');
+                return { 0px; align-items: center; flex-wrap: wrap; }
         @media (max-width: 576px) { .consensus-grid { grid-template-columns: 1fr; } }
         .consensus-stats .stat-item { margin-bottom: 15px; }
-        .consensus-stats .label { font-size: 0.9em; color: #7f8c8d; }
+        .consensus-stats .label { font-size: 0.9em; color: #7f8c
+                    quote: (quoteData && quoteData.length > 0) ? quoteData[0] : null,
+                    estimates: (estimatesData && estimatesData.length > 0) ? estimatesData[0] : null 
+                };
+            } catch (error) {
+                console.error('数据获取过程中发生严重错误:', error);
+                document.querySelector('.main-content').innerHTML = `<div class="card"><p style="color8d; }
         .consensus-stats .value { font-size: 1.2em; font-weight: bold; }
         .rating-chart .bar-wrapper { display: flex; align-items: center; margin-bottom: 8px; }
         .rating-chart .bar-label { width: 50px; font-size: 0.9em; color: #555; }
-        .rating-chart .bar { height: 18px; border-radius: 3px; color: #fff; { year: 'numeric', month: 'long', day: 'numeric' })}`;
-        }
-        
-        const timeframeSelector = document.getElementById('timeframeSelector');
-        if (timeframeSelector) {
-            timeframeSelector.addEventListener('click', (e) => {
-                if (e.target.tagName === 'BUTTON') {
-                    document.querySelectorAll('.timeframe-btn').forEach(btn => btn.classList.remove('active'));
-                    e.target.classList.add('active');
-                    alert('时间切换功能将在后续步骤实现！');
-                }
-            });
+        .rating-chart .bar { height: 18px; border-radius: 3px; color: #fff; font-size: 0.8em; line-height: 18px; padding-left: 5px;:red;">数据加载失败！错误: ${error.message}</p></div>`;
+                return null;
+            }
         }
 
-        // 执行真实数据获取
-        fetchAnalystData();
-    });
-</script>
+        // --- 3. 更新页面的函数 ---
+        function renderPage(data) { box-sizing: border-box; transition: width 0.5s ease-out; text-shadow: 1px 1px 1px rgba(0,0,0,0.1); }
+        .bar-buy { background-color: #2ecc71; }
+        .bar-hold { background-color: #f39c12; }
+        .bar-sell { background-color: #e74c3c; }
+        .analyst-list-container { margin-top: 20px;
+            if (!data || !data.quote || !data.estimates) {
+                document.getElementById('main-card').innerHTML = `<p>未能获取到 ${stockTicker} 的完整数据。</p>`;
+                return;
+            }
+
+            const { quote, estimates } = data;
+            const currentPrice = quote.price;
+            const targetPrice = estimates.estimatedPriceAvg;
+            const upside = ((targetPrice / currentPrice) - border-top: 1px solid #eee; padding-top: 20px;}
+        .analyst-list { list-style-type: none; padding: 0; margin: 0; max-height: 200px; overflow-y: auto; }
+        .analyst-list li { display: flex; justify-content: space-between; padding: 8px 5px; }
+        .analyst-list li:nth-child(odd) { background-color: #f9fafb; 1) * 100;
+            const isPositive = upside >= 0;
+            
+            // 模拟的市场最大潜力值
+            const absoluteMarketMax = 60.0; 
+            const fillPercent = Math.min(Math.abs(upside) / absoluteMarketMax, 1);
+            const degree = fillPercent * 90;
+
+            // 更新股票头部
+            document.getElementById('stockSymbol').textContent = estimates.symbol;
+            document.getElementById('stockName').textContent = '苹果公司'; // 真实场景需要另一个API获取公司名
+
+            // 渲染主卡片内容
+            const mainCard = document.getElementById('main- }
+        .sidebar { display: none; } /* 在这个单页版本中，我们先隐藏侧边栏 */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <div class="brand-info">
+                <h1 class="title">股价预报</h1>
+                <p class="subtitle">by 神算子 (Prophet)</p>
+            </div>
+            <div id="currentDate" class="date-info"></div>
+        </header>
+
+        <card');
+            mainCard.innerHTML = `
+                <div class="timeframe-selector">
+                    <button class="timeframe-btn active">未来12个月</button>
+                </div>
+                <div class="gauge-display">
+                    <div class="gauge-side-label">
+                        <span class="value current">$${currentPrice.toFixed(2)}</span>
+                        <span class="label">当前股价</span>
+                    </div>
+                    <div class="gauge-container">
+                        <div class="gauge-chart" id="gaugeChart">div class="main-layout">
+            <div class="main-content" style="flex: 1;"> <!-- 让主内容区占满全部宽度 -->
+                <div id="stock-analysis-container">
+                    <!-- 这个区域的内容将被JS动态填充 -->
+                    <div class="card"><p>正在加载分析师预报数据...</p></div>
+                </div>
+            </div>
+
+            <aside class="sidebar" id="sidebar">
+                <!-- 侧边栏内容</div>
+                        <div class="zero-line"></div>
+                        <div class="potential-summary">
+                            <div class="value ${isPositive ? 'positive' : 'negative'}">${isPositive ? '▲' : '▼'} ${Math.abs(upside).toFixed(1)}%</div>
+                            <div class="label">潜在空间</div>
+                        </div>
+                    </div>
+                    <div class="gauge-side-label">
+                        <span class="value ${isPositive ? 'positive' : 'negative'}">$${targetPrice.toFixed(2)}</span>
+                        暂时保留，但默认隐藏 -->
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. 配置区域 ---
+        const apiKey = 'YOUR_API_KEY_HERE'; // 替换为您自己的<span class="label">预测股价</span>
+                    </div>
+                </div>
+                <div class="card" style="margin: 20px -20px -20px -20px; box-shadow:none; border-top: 1px solid #eee; border-radius: 0 0 8px 8FMP API Key
+        const stockTicker = 'AAPL'; // 我们要分析的股票代码
+
+        // --- 2. 核心数据获取与处理函数 ---
+        async function fetchAndRenderForecast() {
+            const container = documentpx;">
+                     <h2>分析师共识</h2>
+                    <div class="consensus-grid">
+                        <div class="consensus-stats">
+                            <div class="stat-item"><div class="label">评级分析师</div><div class="value">${estimates.analystsCount} 位</div></div>
+                            <div class="stat.getElementById('stock-analysis-container');
+            container.innerHTML = '<div class="card"><p>正在加载分析师预报数据...</p></div>';
+
+            try {
+                // --- 并行获取两个API的数据 ---
+                const [quoteResponse, estimatesResponse] = await Promise.all([
+                    fetch(`https://financialmodelingprep.com/api/v3/quote-short/${stockTicker}?apikey=${apiKey}`),
+                    fetch(`https://financialmodelingprep.com/api/v3/analyst-estimates/${stockTicker}?apikey=${-item"><div class="label">平均目标价</div><div class="value">$${targetPrice.toFixed(2)}</div></div>
+                            <div class="stat-item"><div class="label">目标价范围</div><div class="value">$${estimates.estimatedPriceLow} - $${estimates.estimatedPriceHigh}</div></div>
+                        </div>
+                        <div class="rating-chart" id="ratingChart"></div>
+                    </div>
+                </div>
+            `;apiKey}`)
+                ]);
+
+                if (!quoteResponse.ok || !estimatesResponse.ok) {
+                    throw new Error('API网络响应错误');
+                }
+
+                const quoteData = await quoteResponse.json();
+
+            
+            // 动态设置仪表盘背景
+            let gradient;
+            if (isPositive) {
+                gradient = `conic-gradient(from 180deg at 50% 100%, #e9ecef 0deg 90deg, #27ae60 90deg ${90 + degree}deg, #e9ecef ${90 + degree}deg 180                const estimatesData = await estimatesResponse.json();
+
+                console.log('获取到当前股价数据:', quoteData);
+                console.log('获取到分析师预报数据:', estimatesData);
+
+                // --- 数据校验 ---
+                if (!quoteData || quoteData.length === 0 || !estimatesData || estimatesData.length === 0) {deg)`;
+            } else {
+                gradient = `conic-gradient(from 180deg at 50% 100%, #e9ecef 0deg ${90 - degree}deg, #e74c3c ${90 - degree}deg 90deg, #e9ecef 90deg 180deg)`;
+            }
+            document.getElementById('gaugeChart').style
+                    throw new Error('未能获取到有效的股票数据或分析师预报。');
+                }
+
+                const currentPrice = quoteData[0].price;
+                const latestForecast = estimatesData[0];
+                
+                // --- 开始渲染页面 ---
+                container.innerHTML = createStockHTML(currentPrice, latestForecast);
+                
+                //.background = gradient;
+            
+            // 渲染评级柱状图
+            const ratingChart = document.getElementById('ratingChart');
+            const totalRatings = estimates.buy + estimates.hold + estimates.sell;
+            ratingChart.innerHTML = `
+                <div class="bar-wrapper"><div class="bar-label">买入</div><div class="bar bar-buy" style="width:${(estimates.buy/totalRatings)*10 渲染完成后，再执行图表的更新
+                updateDashboard(currentPrice, latestForecast);
+
+            } catch (error) {
+                console.error('渲染数据时发生严重错误:', error);
+                container.innerHTML = `<div class="card"><p style="color:red;">数据加载失败！错误: ${error.message}</p></div>0}%">${estimates.buy}</div></div>
+                <div class="bar-wrapper"><div class="bar-label">持有</div><div class="bar bar-hold" style="width:${(estimates.hold/totalRatings)*100}%">${estimates.hold}</div></div>
+                <div class="bar-wrapper"><div class="bar-label">卖出</div><div class="bar bar-sell" style="width:${(estimates.sell/total`;
+            }
+        }
+
+        // --- 3. 动态生成HTML的辅助函数 ---
+        function createStockHTML(currentPrice, forecast) {
+            return `
+                <header class="stock-header">
+                    <div>
+                        <div class="symbol">${forecast.symbol}</div>
+                        <div class="name">Ratings)*100}%">${estimates.sell}</div></div>
+            `;
+        }
+        
+        // --- 4. 页面加载完成后执行 ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.getElementById('currentDate').textContent = `截至 ${new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}`;
+            const data = await fetchAll苹果公司</div> <!-- 暂时硬编码 -->
+                    </div>
+                </header>
+                <div class="card">
+                    <div class="timeframe-selector">
+                        <button class="timeframe-btn active">未来12个月</button> <!-- 暂时只显示一个 -->
+                    </div>
+                    <div class="gauge-display">
+                        <div class="gauge-side-label">
+                            <span class="value current" id="Data(stockTicker);
+            if (data) {
+                renderPage(data);
+            }
+        });
+    </script>
+</body>
+</html>
